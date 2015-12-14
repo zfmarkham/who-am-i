@@ -69,9 +69,11 @@ a {
 }
 .who-am-i-title{
     color: #555;
-    font-size: 40px;
+    font-size: 50px;
     font-weight: 800;
     display: block;
+    padding-bottom: 3%;
+    padding-top: 3%;
 }
 .profile-img{
     width: 96px;
@@ -91,4 +93,14 @@ h1.error-message{
 }
 ul.user-details{
     list-style: none;
+}
+
+blockquote.fact {
+    border-left: 5px solid #439EEE;
+    margin: 0px;
+}
+
+jumbotron.fact {
+    padding-top: 24px
+    padding-bottom: 24px
 }

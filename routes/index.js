@@ -40,7 +40,7 @@ module.exports = function (passport) {
 
     /* GET Home Page */
     router.get('/home', isAuthenticated, function (req, res) {
-        res.render('home', {user: req.user});
+        res.render('home');
     });
 
     /* Handle Logout */
@@ -50,20 +50,25 @@ module.exports = function (passport) {
     });
 
     /* Get WhoAmI */
-    router.get('/whoami', function (req, res) {
+    router.get('/play', isAuthenticated, function (req, res) {
         /*var db = req.db;
-        var collection = db.get('facts');
-        collection.find({}, {}, function (e, docs) {
-            res.render('whoami', {
-                "facts": docs
-            });
-        });*/
+         var collection = db.get('facts');
+         collection.find({}, {}, function (e, docs) {
+         res.render('whoami', {
+         "facts": docs
+         });
+         });*/
 
         var Question = require('../models/question');
-        Question.find(function(err, docs) {
-            res.render('whoami', {question: docs[0]});
+        Question.find(function (err, docs) {
+            res.render('play', {question: docs[0]});
         });
 
+    });
+
+    /* GET Account Page */
+    router.get('/account', isAuthenticated, function (req, res) {
+        res.render('account', {user: req.user});
     });
 
     return router;

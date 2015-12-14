@@ -10,7 +10,6 @@ block content
                     span.icon-bar
                     span.icon-bar
                 a.navbar-brand(href="/") Who Am I?
-
             #bs-example-navbar-collapse-1.collapse.navbar-collapse
                 ul.nav.navbar-nav
                     li
@@ -19,3 +18,23 @@ block content
                         a(href='/play') Play
                     li
                         a(href='#') Leaderboard
+
+    div.container.center
+        div.row
+            div.col
+                h1.text-center.who-am-i-title Who Am I?
+                div.jumbotron.fact
+                    blockquote.fact
+                        h2 #{question.facts[0]}
+                div.jumbotron.fact
+                    blockquote.fact
+                        h2 #{question.facts[1]}
+                div.jumbotron.fact
+                    blockquote.fact
+                        h2 #{question.facts[2]}
+                div.jumbotron.fact
+                    blockquote.fact
+                        h2 #{question.facts[3]}
+                div.jumbotron.fact
+                    blockquote.fact
+                        h2 #{question.facts[4]}
