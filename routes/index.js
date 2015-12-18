@@ -1,5 +1,7 @@
 var express = require('express');
 var router = express.Router();
+var Question = require('../models/question');
+var User = require('../models/user');
 
 var isAuthenticated = function (req, res, next) {
     // if user is authenticated in the session, call the next() to call the next request handler
@@ -51,18 +53,20 @@ module.exports = function (passport) {
 
     /* Get WhoAmI */
     router.get('/play', isAuthenticated, function (req, res) {
-        /*var db = req.db;
-         var collection = db.get('facts');
-         collection.find({}, {}, function (e, docs) {
-         res.render('whoami', {
-         "facts": docs
-         });
-         });*/
 
-        var Question = require('../models/question');
-        Question.find(function (err, docs) {
-            res.render('play', {question: docs[0]});
-        });
+        Question.find(function(err, qdocs) {
+            if (err) return console.log(err);
+            console.log("Q id: " + qdocs[0]._id);
+
+            // Need to add current user's Id to this query
+            User.find({}, {attempts: {$elemMatch: {"questionId" : qdocs[0]._id}}, "_id": 0}, function (err, users) {
+                if (err) return console.log(err);
+                console.log("USER INFO: " + users[0]);
+                res.render('play', {question: qdocs[0]});
+            });
+        })
+
+
 
     });
 
