@@ -82,8 +82,6 @@ module.exports = function (passport) {
 
                 var questionData = user.questionData.id(qdocs[0]._id);
                 var facts = qdocs[0].facts;
-                console.log("Data: " + util.inspect(questionData));
-
                 var response = {};
 
                 if (err) {
@@ -91,9 +89,8 @@ module.exports = function (passport) {
                 }
                 else if (questionData.clues < facts.length)
                 {
-                    //console.log("QUESTION DATA: " + util.inspect(questionData));
-                    response = {revealClue: true};
                     questionData.clues++;
+                    response = {revealClue: true, clueID: questionData.clues};
                     user.save(function (err) {
                             if (err) console.log("Error saving user attempt");
                             else console.log("NO ERROR TEST");
@@ -105,6 +102,31 @@ module.exports = function (passport) {
                     response = {revealClue: false};
                 }
 
+
+                // Handy console.log functionality - util.inspect - use on an object to display it parsed.
+
+                res.send(response);
+            });
+        })
+    });
+
+    /*
+     * POST to resetClues - DEV ONLY
+     */
+    router.post('/resetClues', isAuthenticated, function(req, res) {
+        Question.find(function(err, qdocs) {
+            if (err) return console.log(err);
+
+            User.findById(req.user._id, function(err, user){
+
+                var questionData = user.questionData.id(qdocs[0]._id);
+                var response = (err === null) ? {} : {error: err};
+
+                questionData.clues = 1;
+                user.save(function (err) {
+                        if (err) console.log("Error resetting clues");
+                    }
+                );
 
                 res.send(response);
             });

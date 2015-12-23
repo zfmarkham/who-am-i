@@ -97,10 +97,16 @@ ul.user-details{
 
 blockquote.fact {
     border-left: 5px solid #439EEE;
-    margin: 0px;
+    margin: 0;
 }
 
 jumbotron.fact {
-    padding-top: 24px
-    padding-bottom: 24px
+    padding-top: 24px;
+    padding-bottom: 24px;
 }
+
+hidden {
+    visibility: hidden;
+    display: none;
+}
+

@@ -24,12 +24,18 @@ block content
             .col
                 h1.text-center.who-am-i-title Who Am I?
 
-                - for (var i = 0; i < userInfo.clues; ++i){
-                      .jumbotron.fact(id= "clue" + (i+1))
-                          blockquote.fact
-                              h2 #{question.facts[i]}
-
+                - for (var i = 0; i < question.facts.length; ++i){
+                - if (i < userInfo.clues)
+                    .jumbotron.fact(id= "clue" + (i + 1))
+                        blockquote.fact
+                            h2 #{question.facts[i]}
+                - else
+                    .jumbotron.fact.hidden(id= "clue" + (i + 1))
+                        blockquote.fact
+                            h2 #{question.facts[i]}
                 - }
         .row
             button.btn.btn-default#getClueBtn(onclick="getClue()") Get another clue
+        .row
+            button.btn.btn-default#resetBtn(onclick="reset()") Reset (Dev Only)
 
