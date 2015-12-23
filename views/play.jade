@@ -2,8 +2,8 @@ extends layout
 
 block content
     nav.navbar.navbar-default.navbar-fixed-top
-        div.container-fluid
-            div.navbar-header
+        .container-fluid
+            .navbar-header
                 button(type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false")
                     span.sr-only Toggle navigation
                     span.icon-bar
@@ -19,22 +19,17 @@ block content
                     li
                         a(href='#') Leaderboard
 
-    div.container.center
-        div.row
-            div.col
+    .container.center
+        .row
+            .col
                 h1.text-center.who-am-i-title Who Am I?
-                div.jumbotron.fact
-                    blockquote.fact
-                        h2 #{question.facts[0]}
-                div.jumbotron.fact
-                    blockquote.fact
-                        h2 #{question.facts[1]}
-                div.jumbotron.fact
-                    blockquote.fact
-                        h2 #{question.facts[2]}
-                div.jumbotron.fact
-                    blockquote.fact
-                        h2 #{question.facts[3]}
-                div.jumbotron.fact
-                    blockquote.fact
-                        h2 #{question.facts[4]}
+
+                - for (var i = 0; i < userInfo.clues; ++i){
+                      .jumbotron.fact(id= "clue" + (i+1))
+                          blockquote.fact
+                              h2 #{question.facts[i]}
+
+                - }
+        .row
+            button.btn.btn-default#getClueBtn(onclick="getClue()") Get another clue
+

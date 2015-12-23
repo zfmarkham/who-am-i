@@ -1,8 +1,8 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var attemptsSchema = new Schema({
-    questionId: Schema.Types.ObjectId,
+var questionDataSchema = new Schema({
+    id: Schema.Types.ObjectId,
     attempts: Number,
     clues: Number
 });
@@ -15,7 +15,7 @@ var userSchema = new Schema({
     firstName: String,
     lastName: String,
     points: Number,
-    attempts: [attemptsSchema]
+    questionData: [questionDataSchema]
 });
 
 module.exports = mongoose.model('User', userSchema);
