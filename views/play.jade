@@ -38,4 +38,10 @@ block content
             button.btn.btn-default#getClueBtn(onclick="getClue()") Get another clue
         .row
             button.btn.btn-default#resetBtn(onclick="reset()") Reset (Dev Only)
+        .row
+            .col-lg-6.col-lg-offset-3
+                .input-group
+                    input.form-control.guess-input#guessInput(type='text', placeholder='Enter who I am...')
+                    span.input-group-btn.guess-input
+                        button.guess-input.btn.btn-default#guessBtn(onclick='submitGuess()') Guess!
 

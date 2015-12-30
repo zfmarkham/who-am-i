@@ -2,7 +2,8 @@ var express = require('express');
 var router = express.Router();
 var Question = require('../models/question');
 var User = require('../models/user');
-var util = require('util');
+var inspect = require('util').inspect;
+var Busboy = require('busboy');
 
 var isAuthenticated = function (req, res, next) {
     // if user is authenticated in the session, call the next() to call the next request handler
@@ -131,6 +132,59 @@ module.exports = function (passport) {
                 res.send(response);
             });
         })
+    });
+
+    router.post('/submitGuess', isAuthenticated, function(req, res) {
+
+        var busboy = new Busboy({headers: req.headers});
+        var postdata = {};
+
+        busboy.on('field', function(fieldname, val, fieldNameTruncated, valTruncated, encoding, mimetype) {
+            postdata[fieldname] = val;
+        });
+
+        busboy.on('finish', function() {
+            console.log('POSTDATA : ' + inspect(postdata));
+
+            //res.writeHead(303, {Connection: 'close', Location: '/'});
+            //res.end();
+
+
+            postdata.guess;
+
+            Question.find(function(err, qdocs) {
+                if (err) return console.log(err);
+
+                User.findById(req.user._id, function(err, user){
+
+                    var questionData = user.questionData.id(qdocs[0]._id);
+                    var response = (err === null) ? {} : {error: err};
+
+                    questionData.attempts++;
+
+                    if (postdata.guess.toLowerCase() == qdocs[0].answer.toLowerCase())
+                    {
+                        response = {correct: true};
+                    }
+                    else
+                    {
+                        response = {correct: false};
+                    }
+
+                    user.save(function (err) {
+                            if (err) console.log("Error submitting answer");
+                        }
+                    );
+
+                    res.send(response);
+                });
+            });
+
+
+            // Don't know the difference between res.writeHead + res.end over just res.send.
+            //res.send();
+        });
+        req.pipe(busboy); // Also don't really know what pipe does
     });
 
     /* GET Account Page */

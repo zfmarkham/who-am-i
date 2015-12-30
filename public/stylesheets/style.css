@@ -100,13 +100,18 @@ blockquote.fact {
     margin: 0;
 }
 
-jumbotron.fact {
+.jumbotron.fact {
     padding-top: 24px;
     padding-bottom: 24px;
 }
 
-hidden {
+.hidden {
     visibility: hidden;
     display: none;
+}
+
+.guess-input {
+    height: 64px;
+    font-size: 21px;
 }
 
