@@ -29,7 +29,7 @@ function getClue() {
 
     XHR.send();
 
-};
+}
 
 function submitGuess() {
     var XHR = new XMLHttpRequest();
@@ -69,4 +69,8 @@ function reset() {
     XHR.open('POST', '/resetClues');
 
     XHR.send();
+}
+
+function levelSelect(questionId) {
+    window.location = '/play/' + questionId;
 }

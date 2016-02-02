@@ -53,9 +53,9 @@ module.exports = function (passport) {
         res.redirect('/');
     });
 
-
-    // TODO add isAuthenticated back here
-    /* Get WhoAmI */
+    /*
+     * Handler main play page - show most recent question
+     */
     router.get('/play', isAuthenticated, function (req, res) {
 
         Question.find(function(err, qdocs) {
@@ -68,6 +68,31 @@ module.exports = function (passport) {
 
                 res.render('play', {question: qdocs[0], userInfo: users[0].questionData[0]});
             });
+        })
+    });
+
+    /*
+     * Handler play pages reachable through archive, with appended questionId
+     */
+    router.get('/play/*', isAuthenticated, function (req, res) {
+
+        Question.find(function(err, qdocs) {
+            if (err) return console.log(err);
+
+            // TODO Need to add current user's Id to this query
+            // In here, <"_id": 0> stops the id from being shown in the result
+            User.find({}, {questionData: {$elemMatch: {"_id" : qdocs[0]._id}}, "_id": 0}, function (err, users) {
+                if (err) return console.log(err);
+
+                res.render('play', {question: qdocs[0], userInfo: users[0].questionData[0]});
+            });
+        })
+    });
+
+    router.get('/archive', function (req, res) {
+
+        Question.find(function(err, qdocs) {
+            res.render('archive', {questions: qdocs});
         })
     });
 
