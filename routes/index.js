@@ -54,41 +54,64 @@ module.exports = function (passport) {
     });
 
     /*
-     * Handler main play page - show most recent question
+     * This is linked to the play/:id route below
+     * Not sure how this works but this recognises the id in the play url, and performs it's business on it first
+     * Then the next() call means it goes to the next route that matches the url, so in this case the /play/:id route below
+     * The req param is maintained to the 'next' route, so in the /play/:id route, req will have questionData available to it
+     */
+    router.param('id', function(req, res, next, id) {
+        Question.findOne({_id: id}, function (err, question) {
+            if (err) return next(error);
+            if (!question) return next(new Error('Question not found'));
+            req.questionData = question;
+            next();
+        });
+    });
+
+    /**
+     * Shows question with id that matches url param.
+     */
+    router.get('/play/:id', isAuthenticated, function (req, res) {
+
+        if (req.user.questionData.id(req.questionData._id))
+        {
+            res.render('play', {question: req.questionData, userInfo: req.user.questionData.id(req.questionData._id)});
+        }
+        else
+        {
+            req.user.questionData.push({_id: req.questionData._id, attempts: 0, clues: 1});
+            req.user.save(function (err) {
+                if (!err) {
+                    res.render('play', {question: req.questionData, userInfo: req.user.questionData.id(req.questionData._id)});
+                }
+            });
+        }
+
+    });
+
+    /**
+     * Shows most recent question
      */
     router.get('/play', isAuthenticated, function (req, res) {
 
         Question.find(function(err, qdocs) {
             if (err) return console.log(err);
 
+            var lastQuestion = qdocs[qdocs.length - 1];
+
             // TODO Need to add current user's Id to this query
             // In here, <"_id": 0> stops the id from being shown in the result
-            User.find({}, {questionData: {$elemMatch: {"_id" : qdocs[0]._id}}, "_id": 0}, function (err, users) {
+            User.find({}, {questionData: {$elemMatch: {"_id" : lastQuestion._id}}, "_id": 0}, function (err, users) {
                 if (err) return console.log(err);
 
-                res.render('play', {question: qdocs[0], userInfo: users[0].questionData[0]});
+                res.render('play', {question: lastQuestion, userInfo: users[0].questionData[0]});
             });
         })
     });
 
-    /*
-     * Handler play pages reachable through archive, with appended questionId
+    /**
+     * Archive route, displays question list.
      */
-    router.get('/play/*', isAuthenticated, function (req, res) {
-
-        Question.find(function(err, qdocs) {
-            if (err) return console.log(err);
-
-            // TODO Need to add current user's Id to this query
-            // In here, <"_id": 0> stops the id from being shown in the result
-            User.find({}, {questionData: {$elemMatch: {"_id" : qdocs[0]._id}}, "_id": 0}, function (err, users) {
-                if (err) return console.log(err);
-
-                res.render('play', {question: qdocs[0], userInfo: users[0].questionData[0]});
-            });
-        })
-    });
-
     router.get('/archive', function (req, res) {
 
         Question.find(function(err, qdocs) {
