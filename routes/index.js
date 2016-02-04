@@ -71,18 +71,20 @@ module.exports = function (passport) {
     /**
      * Shows question with id that matches url param.
      */
-    router.get('/play/:id', isAuthenticated, function (req, res) {
+    router.get('/play/:id', isAuthenticated, function (req, res, next) {
 
+        // If question data already exists, pass it to the next handler
         if (req.user.questionData.id(req.questionData._id))
         {
-            res.render('play', {question: req.questionData, userInfo: req.user.questionData.id(req.questionData._id)});
+            next();
         }
         else
         {
+            // else create default question data then pass to next handler
             req.user.questionData.push({_id: req.questionData._id, attempts: 0, clues: 1});
             req.user.save(function (err) {
                 if (!err) {
-                    res.render('play', {question: req.questionData, userInfo: req.user.questionData.id(req.questionData._id)});
+                    next();
                 }
             });
         }
@@ -92,21 +94,19 @@ module.exports = function (passport) {
     /**
      * Shows most recent question
      */
-    router.get('/play', isAuthenticated, function (req, res) {
+    router.get('/play*', isAuthenticated, function (req, res) {
 
-        Question.find(function(err, qdocs) {
-            if (err) return console.log(err);
-
-            var lastQuestion = qdocs[qdocs.length - 1];
-
-            // TODO Need to add current user's Id to this query
-            // In here, <"_id": 0> stops the id from being shown in the result
-            User.find({}, {questionData: {$elemMatch: {"_id" : lastQuestion._id}}, "_id": 0}, function (err, users) {
-                if (err) return console.log(err);
-
-                res.render('play', {question: lastQuestion, userInfo: users[0].questionData[0]});
+        if (req.questionData)
+        {
+            res.render('play', {question: req.questionData, userInfo: req.user.questionData.id(req.questionData._id)});
+        }
+        else
+        {
+            // Get most recent question and render that
+            Question.findOne({}).sort('-_id').exec(function (err, question) {
+                res.render('play', {question: question, userInfo: req.user.questionData.id(question._id)});
             });
-        })
+        }
     });
 
     /**
