@@ -154,3 +154,7 @@ blockquote.fact {
     color: white;
 }
 
+svg {
+    width: 100%;
+    padding: 1%;
+}

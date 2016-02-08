@@ -74,3 +74,34 @@ function reset() {
 function levelSelect(questionId) {
     window.location = '/play/' + questionId;
 }
+
+
+// Gradient colours : [#d4af37, fff, d4af37]
+function tweenGloss() {
+    var elems = document.getElementsByTagName('svg');
+
+    var sticker = elems[0];
+
+    //TweenLite.to(sticker, 1, {width: "0%"});
+    TweenLite.to("#grad", 0.7, {onUpdate: updateTween});
+}
+
+function updateTween() {
+    var elems = document.getElementsByTagName('svg');
+    var sticker = elems[0];
+
+    var grad = sticker.getElementById('grad');
+
+    var stops = grad.getElementsByTagName('stop');
+
+    //for (var i = 0; i < stops.length; i++)
+    //{
+    //    var stop = stops[i];
+    //    var val = Number(stop.getAttribute('offset'));
+    //    stop.setAttribute('offset', val *  (1 - this.ratio));
+    //}
+
+    stops[0].setAttribute('offset', (1 - this.ratio) - 0.1);
+    stops[1].setAttribute('offset', (1 - this.ratio) - 0.05);
+    stops[2].setAttribute('offset', (1 - this.ratio));
+}
