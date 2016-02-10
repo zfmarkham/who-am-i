@@ -1,16 +1,21 @@
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 250 330" onclick="tweenGloss()">
   <defs>
     <linearGradient id="grad" x1="174.62" y1="-20.2" x2="75.38" y2="350.2" gradientUnits="userSpaceOnUse">
-      <stop offset="0.98" stop-color="#d4af37"/>
-      <stop offset="0.99" stop-color="#fefdfb"/>
+      <stop offset="0" stop-color="#d4af37"/>
+      <stop offset="0.14" stop-color="#fefdfb"/>
+      <stop offset="0.27" stop-color="#d6b23f"/>
+      <stop offset="0.45" stop-color="#816e26"/>
+      <stop offset="0.59" stop-color="#d6b23f"/>
+      <stop offset="0.82" stop-color="#d6b23f"/>
+      <stop offset="0.91" stop-color="#fff"/>
       <stop offset="1" stop-color="#d6b23f"/>
     </linearGradient>
   </defs>
   <title>StickerBorder</title>
-  <rect x="5" y="292.04" width="240" height="30.58" style="fill: #aa4c4e;stroke: #000;stroke-miterlimit: 10;stroke-width: 4px"/>
-  <polygon points="6.71 4 6.71 53.09 47.54 53.09 68.22 32.41 245 32.41 246.28 4 6.71 4" style="fill: #2680b8"/>
-  <polyline points="5 54.09 47.06 54.09 67.51 33.41 242.31 33.41" style="fill: none;stroke: #000;stroke-miterlimit: 10;stroke-width: 4px"/>
-  <rect x="5" y="5" width="240" height="320" style="fill: none;stroke-miterlimit: 10;stroke-width: 10px;stroke: url(#grad)"/>
-  <circle cx="196.64" cy="292.04" r="21.94" style="fill: #fff;stroke: #000;stroke-miterlimit: 10;stroke-width: 4px"/>
-  <text transform="translate(189.7 304.34)" style="font-size: 28.58350944519043px;fill: #1d1d1b;font-family: KG Second Chances Sketch">7</text>
+  <rect x="5" y="292.04" width="240" height="30.58" fill="#aa4c4e" stroke="#4f2426" stroke-miterlimit="10" stroke-width="4px"/>
+  <polygon points="6.71 4 6.71 53.09 47.54 53.09 68.22 32.41 245 32.41 246.28 4 6.71 4" fill="#2680b8"/>
+  <polyline points="5 54.09 47.06 54.09 67.51 33.41 242.31 33.41" fill="none" stroke="#184c66" stroke-miterlimit="10" stroke-width="4px"/>
+  <rect x="5" y="5" width="240" height="320" fill="none" stroke-miterlimit="10" stroke-width="10px" stroke="url(#grad)"/>
+  <circle cx="196.64" cy="292.04" r="21.94" fill="#fff" stroke="#4f2426" stroke-miterlimit="10" stroke-width="4px"/>
+  <text transform="translate(188.7 304.34)" font-size="28.58350944519043px" fill="#1d1d1b" font-family="KG Second Chances Sketch">7</text>
 </svg>

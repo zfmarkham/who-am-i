@@ -5,6 +5,8 @@ var User = require('../models/user');
 var inspect = require('util').inspect;
 var Busboy = require('busboy');
 
+var latinise = require('../public/javascripts/latinise.min_.js');
+
 var isAuthenticated = function (req, res, next) {
     // if user is authenticated in the session, call the next() to call the next request handler
     // Passport adds this method to request object. A middleware is allowed to add properties to
@@ -127,35 +129,27 @@ module.exports = function (passport) {
         Question.find(function(err, qdocs) {
             if (err) return console.log(err);
 
-            User.findById(req.user._id, function(err, user){
+            var ref = req.headers.referer.slice(req.headers.referer.lastIndexOf("/"));
+            var question = (ref == "/play") ? qdocs[qdocs.length - 1] : qdocs.id(ref);
 
-                var questionData = user.questionData.id(qdocs[0]._id);
-                var facts = qdocs[0].facts;
-                var response = {};
+            var qData = req.user.questionData.id(question._id);
+            var facts = question.facts;
+            var response = err ? {error: err} : {};
 
-                if (err) {
-                    response = {error: err};
-                }
-                else if (questionData.clues < facts.length)
-                {
-                    questionData.clues++;
-                    response = {revealClue: true, clueID: questionData.clues};
-                    user.save(function (err) {
-                            if (err) console.log("Error saving user attempt");
-                            else console.log("NO ERROR TEST");
-                        }
-                    );
-                }
-                else
-                {
-                    response = {revealClue: false};
-                }
+            if (!err && qData.clues < facts.length)
+            {
+                qData.clues++;
+                response = {revealClue: true, clueID: qData.clues};
+                req.user.save(function (err) {
+                    if (err) console.log("Error saving user attempt");
+                })
+            }
+            else
+            {
+                response.revealClue = false;
+            }
 
-
-                // Handy console.log functionality - util.inspect - use on an object to display it parsed.
-
-                res.send(response);
-            });
+            res.send(response);
         })
     });
 
@@ -192,42 +186,33 @@ module.exports = function (passport) {
         });
 
         busboy.on('finish', function() {
-            console.log('POSTDATA : ' + inspect(postdata));
-
-            //res.writeHead(303, {Connection: 'close', Location: '/'});
-            //res.end();
-
-
-            postdata.guess;
 
             Question.find(function(err, qdocs) {
                 if (err) return console.log(err);
 
-                User.findById(req.user._id, function(err, user){
+                var ref = req.headers.referer.slice(req.headers.referer.lastIndexOf("/"));
+                var question = (ref == "/play") ? qdocs[qdocs.length - 1] : qdocs.id(ref);
 
-                    var questionData = user.questionData.id(qdocs[0]._id);
-                    var response = (err === null) ? {} : {error: err};
+                req.user.questionData.id(question._id).attempts++;
 
-                    questionData.attempts++;
+                var response = err ? {error: err} : {};
 
-                    if (postdata.guess.toLowerCase() == qdocs[0].answer.toLowerCase())
-                    {
-                        response = {correct: true};
+                if (postdata.guess.latinise().toLowerCase() == question.answer.latinise().toLowerCase())
+                {
+                    response = {correct: true};
+                }
+                else
+                {
+                    response = {correct: false};
+                }
+
+                req.user.save(function (err) {
+                        if (err) console.log("Error submitting answer");
                     }
-                    else
-                    {
-                        response = {correct: false};
-                    }
+                );
 
-                    user.save(function (err) {
-                            if (err) console.log("Error submitting answer");
-                        }
-                    );
-
-                    res.send(response);
-                });
+                res.send(response);
             });
-
 
             // Don't know the difference between res.writeHead + res.end over just res.send.
             //res.send();

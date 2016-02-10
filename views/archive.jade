@@ -4,7 +4,7 @@ block content
 
     .ul.flex-container
         - for (var i = 0; i < questions.length; ++i){
-            //a.flex-item(onclick='levelSelect("#{questions[i]._id}")') #{i + 1}
-            div(width="240", height="360", border="10")
+            a.flex-item(onclick='levelSelect("#{questions[i]._id}")') #{i + 1}
+            //div(width="240", height="360", border="10")
                 include ../public/media/StickerBorder.svg
         - }
