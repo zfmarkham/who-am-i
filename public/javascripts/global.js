@@ -59,7 +59,7 @@ function submitGuess() {
 function reset() {
     var XHR = new XMLHttpRequest();
     XHR.addEventListener('load', function(event) {
-        console.log("Clues Reset");
+        location = location;
     });
 
     XHR.addEventListener('error', function(event) {

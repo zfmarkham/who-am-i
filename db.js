@@ -1,4 +1,7 @@
-module.exports = {
-	'url' : 'mongodb://admin:wh0amipass@ds027495.mongolab.com:27495/whoami'
-	//'url' : 'mongodb://localhost/test'
+if (!process.env.dbURL) {
+    require('./env.js');
 }
+
+module.exports = {
+    'url': process.env.dbURL
+};

@@ -100,13 +100,41 @@ module.exports = function (passport) {
 
         if (req.questionData)
         {
-            res.render('play', {question: req.questionData, userInfo: req.user.questionData.id(req.questionData._id)});
+            if (req.user.questionData.id(req.questionData._id)) {
+                res.render('play', {
+                    question: req.questionData,
+                    userInfo: req.user.questionData.id(req.questionData._id)
+                });
+            }
+            else {
+                req.user.questionData.push({_id: req.questionData._id, attempts: 0, clues: 1});
+                req.user.save(function (err) {
+                    if (!err) {
+                        res.render('play', {
+                            question: req.questionData,
+                            userInfo: req.user.questionData.id(req.questionData._id)
+                        });
+                    }
+                });
+            }
         }
         else
         {
             // Get most recent question and render that
             Question.findOne({}).sort('-_id').exec(function (err, question) {
-                res.render('play', {question: question, userInfo: req.user.questionData.id(question._id)});
+                if (req.user.questionData.id(question._id))
+                {
+                    res.render('play', {question: question, userInfo: req.user.questionData.id(question._id)});
+                }
+                else
+                {
+                    req.user.questionData.push({_id: question._id, attempts: 0, clues: 1});
+                    req.user.save(function (err) {
+                        if (!err) {
+                                res.render('play', {question: question, userInfo: req.user.questionData.id(question._id)});
+                            }
+                        });
+                }
             });
         }
     });
